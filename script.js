@@ -36,61 +36,112 @@ function convertPlayerChoice() {
     playerChoice = playerChoice.charAt(0).toLowerCase();
 }
 
-function evaluateMatch() {
+function evaluateMatch(playerChoice) {
     convertComputerChoice();
-    convertPlayerChoice();
 
     if (computerChoice === "r" && playerChoice === "s") {
         computerWins++;
-        console.log("You Lose! Rock beats Scissors")
+        results.textContent = "You Lose! Rock beats Scissors";
     }
     else if (computerChoice === "p" && playerChoice === "r") {
         computerWins++;
-        console.log("You Lose! Paper beats Rock")
+  
+        results.textContent = "You Lose! Paper beats Rock";
     }
     else if (computerChoice === "s" && playerChoice === "p") {
         computerWins++;
-        console.log("You Lose! Scissors beats Paper")
+        results.textContent = "You Lose! Scissors beats Paper";
     }
     else if (playerChoice === "r" && computerChoice === "s") {
         playerWins++;
-        console.log("You Win! Rock beats Scissors")
+        results.textContent = "You Win! Rock beats Scissors";
     }
     else if (playerChoice === "p" && computerChoice === "r") {
         playerWins++;
-        console.log("You Win! Paper beats Rock")   
+        results.textContent = "You Win! Paper beats Rock";   
     }
     else if (playerChoice === "s" && computerChoice === "p") {
         playerWins++;
-        console.log("You Win! Scissors beats Paper")
+        results.textContent = "You Win! Scissors beats Paper";
     }
-    else console.log("Tie!");
-}
+    else results.textContent = "Tie!";
+};
 
 // Starts round prompts user to choose.
 function playRound() {
     convertComputerChoice();
-    playerChoice = prompt("Rock, Paper, Scissors?");
-    convertPlayerChoice();
-        if (playerChoice === "r" || //Checks if player input is valid.
-            playerChoice === "p" ||
-            playerChoice === "s") {
-            evaluateMatch();
-            console.log("Player Wins: " + playerWins);
-            console.log("Computer Wins: " + computerWins);
-            }
-        else {
-            alert("Please choose: Rock, Paper, Scissors.");
-            playRound();
-        }
+            evaluateMatch(playerChoice);
+            console.log(playerWins);
+            console.log(computerWins);
 }
 
-// Plays 5 rounds of RPS. 
-function game() {
-    for (let i = 0; i < 5; i++) {
+function endGame() {
+    if (playerWins === 5) {
+        scoreboard.textContent = "You are the Winner!";
+        playerWins = 0;
+        computerWins = 0;
+    } else if (computerWins === 5) {
+        scoreboard.textContent = "Sorry the Computer is the Winner.";
+        playerWins = 0;
+        computerWins = 0;
+    } else { 
+        scoreboard.textContent = "Player Wins: " + playerWins +
+        " Computer Wins: " + computerWins; };
+};
+
+const container = document.querySelector('#container');
+
+const content = document.createElement('div');
+
+const rock = document.createElement('button');
+rock.textContent = "ROCK";
+
+const scissors = document.createElement('button');
+scissors.textContent = "SCISSORS";
+
+const paper = document.createElement('button');
+paper.textContent = "PAPER";
+
+const reset = document.createElement('button');
+reset.textContent = "RESET";
+
+container.appendChild(content);
+content.style.cssText = "background-color: lightblue; height: 100vh";
+
+content.appendChild(rock);
+content.appendChild(scissors);
+content.appendChild(paper);
+content.appendChild(reset);
+
+rock.addEventListener("click", () => {
+    playerChoice = 'r';
     playRound();
-    }
+    endGame();
+});
+
+scissors.addEventListener("click", () => {
+    playerChoice = 's';
+    playRound();
+    endGame();
+});
+
+paper.addEventListener("click", () => {
+    playerChoice = 'p';
+    playRound();
+    endGame();
+});
+
+reset.addEventListener("click", () => {
     playerWins = 0;
     computerWins = 0;
-}
+    scoreboard.textContent = "Player Wins: " + playerWins + " Computer Wins: " + computerWins;
+    results.textContent = "";
+})
+
+const scoreboard = document.createElement('div');
+content.appendChild(scoreboard);
+scoreboard.textContent = "Player Wins: " + playerWins + " Computer Wins: " + computerWins;
+
+const results = document.createElement('div');
+content.appendChild(results);
 
